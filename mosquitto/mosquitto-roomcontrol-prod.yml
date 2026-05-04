@@ -1,0 +1,20 @@
+services:
+
+  mosquitto-prod:
+    image: eclipse-mosquitto:2.0.22
+    networks:
+      - roomcontrol
+    deploy:
+      restart_policy:
+        max_attempts: 30
+    ports:
+      - "1883:1883"
+      - "9001:9001"
+    volumes:
+      - /var/docker/compose/mosquitto/config/mosquitto.conf:/mosquitto/config/mosquitto.conf:ro
+      - /var/docker/volumes/mosquitto/data:/mosquitto/data
+      - /var/docker/volumes/mosquitto/log:/mosquitto/log
+
+networks:
+  roomcontrol:
+    external: true
