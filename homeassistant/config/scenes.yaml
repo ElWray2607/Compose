@@ -1,0 +1,23 @@
+- id: scene_one
+  name: Scene One
+  entities:
+    light.mqtt_rgb_light:
+      state: "on"
+      brightness: 150
+      rgb_color: [255, 220, 180]
+    fan.fan:
+      state: "on"
+      percentage: 25
+      direction: "forward"
+
+- id: scene_two
+  name: Scene Two
+  entities:
+    light.mqtt_rgb_light:
+      state: "on"
+      brightness: 80
+      rgb_color: [180, 200, 255]
+    fan.fan:
+      state: "on"
+      percentage: 40
+      direction: forward

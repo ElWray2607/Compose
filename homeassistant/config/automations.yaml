@@ -1,0 +1,19 @@
+- id: left_button_scene_trigger
+  alias: Trigger Scene One with Left Button
+  trigger:
+    - platform: mqtt
+      topic: home/button/left/pressed
+  action:
+    - service: scene.turn_on
+      target:
+        entity_id: scene.scene_one
+
+- id: right_button_scene_trigger
+  alias: Trigger Scene Two with Right Button
+  trigger:
+    - platform: mqtt
+      topic: home/button/right/pressed
+  action:
+    - service: scene.turn_on
+      target:
+        entity_id: scene.scene_two

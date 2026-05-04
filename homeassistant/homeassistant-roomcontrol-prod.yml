@@ -1,0 +1,30 @@
+services:
+
+  homeassistant-prod:
+    image: homeassistant/home-assistant:2026.4
+    deploy:
+      restart_policy:
+        max_attempts: 30
+    volumes:
+      - /var/docker/compose/homeassistant/config/configuration.yaml:/config/configuration.yaml:ro
+      - /var/docker/compose/homeassistant/config/automations.yaml:/config/automations.yaml:ro
+      - /var/docker/compose/homeassistant/config/scenes.yaml:/config/scenes.yaml:ro
+      - /var/docker/compose/homeassistant/config/scripts.yaml:/config/scripts.yaml:ro
+      - /var/docker/compose/homeassistant/config/themes:/config/themes:rw
+      - /var/docker/volumes/homeassistant:/config
+      - /etc/localtime:/etc/localtime:ro
+      - /run/dbus:/run/dbus:ro
+    cap_add:
+      - ALL
+    init: false
+    privileged: true
+    networks:
+      - roomcontrol
+    environment:
+      TZ: Europe/Berlin
+      VIRTUAL_HOST: assistant.itt.com
+      VIRTUAL_PORT: 8123
+
+networks:
+  roomcontrol:
+    external: true
