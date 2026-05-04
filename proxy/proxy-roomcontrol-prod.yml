@@ -1,0 +1,25 @@
+services:
+
+  proxy-prod:
+    image: nginxproxy/nginx-proxy
+    networks:
+      - roomcontrol
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: 150M
+      restart_policy:
+        max_attempts: 30
+      update_config:
+        delay: 10s
+    tty: true
+    user: 0:0
+    ports:
+      - "80:80"
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+
+networks:
+  roomcontrol:
+    external: true
