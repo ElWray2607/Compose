@@ -1,0 +1,159 @@
+# Loads default integrations, frontend, API, history, logbook, etc.
+default_config:
+
+homeassistant:
+  name: Home
+  latitude: 49.941438350273835
+  longitude: 11.603092021078352
+  elevation: 357
+  unit_system: metric
+  currency: EUR
+  country: GE
+  time_zone: Europe/Berlin
+  external_url: "http://assistant.itt.com"
+  internal_url: "http://assistant.itt.com"
+
+http:
+  use_x_forwarded_for: true
+  trusted_proxies:
+    - 0.0.0.0/0
+
+recorder:
+  purge_keep_days: 14
+  commit_interval: 30
+
+logger:
+  default: warning
+  logs:
+    homeassistant.components.http: warning
+    homeassistant.components.websocket_api: warning
+
+automation: !include automations.yaml
+script: !include scripts.yaml
+scene: !include scenes.yaml
+
+frontend:
+  themes: !include_dir_merge_named themes
+
+mqtt:
+  light:
+    - name: "RGB Light"
+      unique_id: mqtt_rgb_light
+      command_topic: "home/rgb_light/set"
+      state_topic: "home/rgb_light/state"
+      brightness_command_topic: "home/rgb_light/brightness/set"
+      brightness_state_topic: "home/rgb_light/brightness/state"
+      brightness_scale: 255
+      rgb_command_topic: "home/rgb_light/rgb/set"
+      rgb_state_topic: "home/rgb_light/rgb/state"
+      payload_on: "ON"
+      payload_off: "OFF"
+
+    - name: "Yellow LED"
+      unique_id: yellow_led
+      command_topic: "home/yellow_led/set"
+      state_topic: "home/yellow_led/state"
+      payload_on: "ON"
+      payload_off: "OFF"
+
+  sensor:
+    - name: "Temperature"
+      unique_id: mqtt_temperature_sensor
+      state_topic: "home/xht11/temperature"
+      device_class: temperature
+      state_class: measurement
+      unit_of_measurement: "°C"
+      value_template: "{{ value | float }}"
+
+    - name: "Humidity"
+      state_topic: "home/xht11/humidity"
+      device_class: humidity
+      state_class: measurement
+      unit_of_measurement: "%"
+      value_template: "{{ value | float }}"
+
+  binary_sensor:
+    - name: "Motion Sensor"
+      unique_id: pir_motion
+      state_topic: "home/motion/state"
+      payload_on: "ON"
+      payload_off: "OFF"
+      device_class: motion
+
+    - name: "Gas Sensor"
+      unique_id: mqtt_gas_sensor
+      state_topic: "home/gas/detected"
+      payload_on: "true"
+      payload_off: "false"
+      device_class: gas
+
+  switch:
+    - name: "Buzzer"
+      unique_id: buzzer
+      command_topic: "home/buzzer/set"
+      state_topic: "home/buzzer/state"
+      payload_on: "ON"
+      payload_off: "OFF"
+
+  text:
+    - name: "LCD Display"
+      unique_id: lcd_display
+      command_topic: "home/lcd/set"
+      state_topic: "home/lcd/state"
+
+  fan:
+    - name: "Fan"
+      state_topic: "home/motor/state"
+      command_topic: "home/motor/set"
+      direction_state_topic: "home/motor/direction/state"
+      direction_command_topic: "home/motor/direction/set"
+      percentage_state_topic: "home/motor/speed/percentage/state"
+      percentage_command_topic: "home/motor/speed/percentage/set"
+      preset_mode_state_topic: "home/motor/preset/presetmode/state"
+      preset_mode_command_topic: "home/motor/preset/presetmode/set"
+      preset_modes:
+        - "OFF"
+        - "LOW"
+        - "MEDIUM"
+        - "HIGH"
+      payload_on: "true"
+      payload_off: "false"
+      speed_range_min: 1
+      speed_range_max: 10
+
+  button:
+    - name: "Left Button"
+      unique_id: left_button
+      command_topic: "home/button/left/press"
+
+    - name: "Right Button"
+      unique_id: right_button
+      command_topic: "home/button/right/press"
+
+  cover:
+    - name: "Window"
+      unique_id: window_servo
+      command_topic: "home/window/set"
+      state_topic: "home/window/state"
+      position_topic: "home/window/position/state"
+      set_position_topic: "home/window/position/set"
+
+      payload_open: "OPEN"
+      payload_close: "CLOSE"
+      payload_stop: "STOP"
+
+      state_open: "OPEN"
+      state_closed: "CLOSE"
+      state_stopped: "STOP"
+
+      position_open: 100
+      position_closed: 0
+
+    - name: "Door Servo"
+      unique_id: door_servo
+      command_topic: "home/door/set"
+      state_topic: "home/door/state"
+      payload_open: "OPEN"
+      payload_close: "CLOSE"
+      state_open: "OPEN"
+      state_closed: "CLOSE"
